@@ -1,7 +1,5 @@
 // @name         quick iTunes
 // @description  quick control "iTunes for Windows"
-// @author       sima
-// @Last Change: 2013-09-10.
 
 /* Execute:
  *   [cscript //nologo] quickitunes.js {command} [{argument} ...]
@@ -21,8 +19,8 @@ var _p = _.currentPlaylist;
 var _t = _.currentTrack;
 
 var commands = {
-   'run'  : function(){ /* _.run(); */ }
-//   ,'quit' : function(){ _.quit(); } // ERROR OCCURRED
+  'run' : function(){ /* _.run(); */ }
+  // ,'quit' : function(){ _.quit(); } // ERROR OCCURRED
   ,'play'      : function(){ _.play(); }
   ,'pause'     : function(){ _.pause(); }
   ,'playPause' : function(){ _.playPause(); } // toggle the playing/paused state
