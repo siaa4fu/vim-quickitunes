@@ -13,13 +13,12 @@ let s:files = {
 let s:has_vimproc = 0
 silent! let s:has_vimproc = vimproc#version()
 
-function! quickitunes#request(...) " {{{
-  let g:quickitunes_response = substitute(iconv(call(
-  \ s:has_vimproc ? 'vimproc#system' : 'system',
-  \ ['cscript //nologo ' . s:files.script . ' ' . (get(a:, '1', '') == '' ? 'run' : a:1)],
-  \), 'sjis', &encoding), '^\n\+\|\n\+$', '', 'g')
-  echo g:quickitunes_response
-endfunction " }}}
+function! quickitunes#request(command)
+  return substitute(iconv(call(
+        \ s:has_vimproc ? 'vimproc#system' : 'system',
+        \ ['cscript //nologo ' . s:files.script . ' ' . a:command],
+        \), 'sjis', &encoding), '\m^\n\+\|\n\+$', '', 'g')
+endfunction
 
 " variables for complete {{{
 let s:completes = {}

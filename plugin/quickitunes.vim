@@ -13,10 +13,10 @@ let g:quickitunes_quickinfo =
 
 " Windows only!
 if has('win32') || has('win64')
-  command! -nargs=* -complete=customlist,quickitunes#complete QuickiTunes
-        \ call quickitunes#request(<q-args>)
+  command! -nargs=+ -complete=customlist,quickitunes#complete QuickiTunes
+        \ echohl WarningMsg | echo quickitunes#request(<q-args>) | echohl None
   command! -nargs=0 QuickiTunesInfo
-        \ call quickitunes#request('trackInfo ' . g:quickitunes_quickinfo)
+        \ echo quickitunes#request('trackInfo ' . g:quickitunes_quickinfo)
 endif
 
 let &cpoptions = s:save_cpo
