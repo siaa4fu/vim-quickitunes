@@ -22,7 +22,7 @@ if has('win32') || has('win64')
   command! -bar -bang -nargs=* QuickiTunesLyrics
         \ try |
         \   if ! isdirectory(g:quickitunes_lyrics_dir) | throw 'Directory does not exist.' | endif |
-        \   execute (<bang>1 ? 'split ' : 'vsplit ') . g:quickitunes_lyrics_dir . '/'
+        \   execute (<bang>1 ? 'split ' : 'edit ') . g:quickitunes_lyrics_dir . '/'
         \         . '*' . (<q-args> ==# '' ? g:quickitunes#request('trackInfo name') : <q-args>) . '*' |
         \ catch |
         \   echohl ErrorMsg | echo 'Lyrics not found. (or too many lyrics found.)' | echohl None |
