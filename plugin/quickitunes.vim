@@ -13,7 +13,13 @@ let g:quickitunes_quickinfo =
 let g:quickitunes_lyrics_rootdir =
       \ substitute(get(g:, 'quickitunes_lyrics_rootdir', ''), '\m[\\/]$', '', '')
 let g:quickitunes_lyrics_findrule =
-      \ get(g:, 'quickitunes_lyrics_findrule', [])
+      \ get(g:, 'quickitunes_lyrics_findrule', [
+      \   '<artist> - <name>.txt',
+      \   '<artist> - <fuzzy_name>.txt',
+      \   '* - <name>.txt',
+      \   '* - <fuzzy_name>.txt',
+      \   '* - <fuzzy_name>*'
+      \ ])
 let g:quickitunes_lyrics_skippairs =
       \ get(g:, 'quickitunes_lyrics_skippairs', ['()', '{}', '[]', '<>'])
 
