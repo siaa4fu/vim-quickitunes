@@ -27,11 +27,15 @@ function! quickitunes#getlyricspath(...)
     return ''
   endif
   let trackinfo = {}
+  let trackinfo._re_skippairs = '\V\s\*\%(' . join(map(
+        \  filter(copy(g:quickitunes_lyrics_skippairs), {k, v -> strchars(v) == 2}),
+        \  {k, v -> substitute(v, '\m^\(.\)\(.\)$', {m -> m[1] . '\[^' . m[2] . ']\*' . m[2]}, '')}
+        \), '\|') . '\)\s\*'
   function! trackinfo._get(key) " {{{
     if ! has_key(self, a:key)
       if match(a:key, '^fuzzy_') > -1
         let self[a:key] = self._get(matchstr(a:key, '\m^fuzzy_\zs.*'))
-              \ ->substitute('\V\s\*\%(' . join(map(g:quickitunes_lyrics_skippairs, {k, v -> v[0] . '\[^' . v[1] . ']\*' . v[1]}), '\|') . '\)\s\*', '*', 'g')
+              \ ->substitute(self._re_skippairs, '*', 'g')
               \ ->substitute('\m\*\+', '*', 'g')
       else
         let self[a:key] = quickitunes#request('trackInfo ' . a:key)
