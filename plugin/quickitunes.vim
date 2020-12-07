@@ -10,8 +10,8 @@ let g:quickitunes_hide_completes =
       \ get(g:, 'quickitunes_hide_completes', [])
 let g:quickitunes_quickinfo =
       \ get(g:, 'quickitunes_quickinfo', 'name artist album year rating')
-let g:quickitunes_lyrics_dir =
-      \ substitute(get(g:, 'quickitunes_lyrics_dir', ''), '[\\/]$', '', '')
+let g:quickitunes_lyrics_rootdir =
+      \ substitute(get(g:, 'quickitunes_lyrics_rootdir', ''), '\m[\\/]$', '', '')
 
 " Windows only!
 if has('win32') || has('win64')
@@ -21,8 +21,8 @@ if has('win32') || has('win64')
         \ echo quickitunes#request('trackInfo ' . g:quickitunes_quickinfo)
   command! -bar -bang -nargs=* QuickiTunesLyrics
         \ try |
-        \   if ! isdirectory(g:quickitunes_lyrics_dir) | throw 'Directory does not exist.' | endif |
-        \   execute (<bang>1 ? 'split ' : 'edit ') . g:quickitunes_lyrics_dir . '/'
+        \   if ! isdirectory(g:quickitunes_lyrics_rootdir) | throw 'Directory does not exist.' | endif |
+        \   execute (<bang>1 ? 'split ' : 'edit ') . g:quickitunes_lyrics_rootdir . '/'
         \         . '*' . (<q-args> ==# '' ? g:quickitunes#request('trackInfo name') : <q-args>) . '*' |
         \ catch |
         \   echohl ErrorMsg | echo 'Lyrics not found. (or too many lyrics found.)' | echohl None |
