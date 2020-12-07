@@ -14,6 +14,8 @@ let g:quickitunes_lyrics_rootdir =
       \ substitute(get(g:, 'quickitunes_lyrics_rootdir', ''), '\m[\\/]$', '', '')
 let g:quickitunes_lyrics_findrule =
       \ get(g:, 'quickitunes_lyrics_findrule', [])
+let g:quickitunes_lyrics_skippairs =
+      \ get(g:, 'quickitunes_lyrics_skippairs', ['()', '{}', '[]', '<>'])
 
 " Windows only!
 if has('win32') || has('win64')
