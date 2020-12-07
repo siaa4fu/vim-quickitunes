@@ -20,6 +20,40 @@ function! quickitunes#request(command)
         \), 'sjis', &encoding), '\m^\n\+\|\n\+$', '', 'g')
 endfunction
 
+function! quickitunes#getlyricspath(...)
+  " a:1 - fuzzy filename (string)
+  if ! isdirectory(g:quickitunes_lyrics_rootdir)
+    echohl ErrorMsg | echo 'Lyrics directory does not exist.' | echohl None
+    return ''
+  endif
+  let trackinfo = {}
+  function! trackinfo._get(key) " {{{
+    if ! has_key(self, a:key)
+      if match(a:key, '^fuzzy_') > -1
+        let self[a:key] = self._get(matchstr(a:key, '\m^fuzzy_\zs.*'))
+              \ ->substitute('\V\s\*\%(' . join(map(['()', '{}', '[]', '<>'], {k, v -> v[0] . '\[^' . v[1] . ']\*' . v[1]}), '\|') . '\)\s\*', '*', 'g')
+              \ ->substitute('\m\*\+', '*', 'g')
+      else
+        let self[a:key] = quickitunes#request('trackInfo ' . a:key)
+      endif
+    endif
+    return self[a:key]
+  endfunction " }}}
+  let rules = get(a:, 1, '') !=# ''
+        \ ? ['*' . substitute(a:1, '\m^\*\|\*$', '', 'g') . '*']
+        \ : g:quickitunes_lyrics_findrule
+  for rule in rules
+    let files = globpath(g:quickitunes_lyrics_rootdir . '/',
+          \ substitute(rule, '\m<\([^> ]*\)>', {m -> trackinfo._get(m[1])}, 'g'),
+          \ 0, 1)
+    if len(files) == 1
+      return files[0]
+    endif
+  endfor
+  echohl ErrorMsg | echo 'Lyrics not found, or too many lyrics found.' | echohl None
+  return ''
+endfunction
+
 " variables for complete {{{
 let s:completes = {}
 let s:completes.commands = filter([

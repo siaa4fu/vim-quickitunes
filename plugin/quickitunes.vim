@@ -12,6 +12,8 @@ let g:quickitunes_quickinfo =
       \ get(g:, 'quickitunes_quickinfo', 'name artist album year rating')
 let g:quickitunes_lyrics_rootdir =
       \ substitute(get(g:, 'quickitunes_lyrics_rootdir', ''), '\m[\\/]$', '', '')
+let g:quickitunes_lyrics_findrule =
+      \ get(g:, 'quickitunes_lyrics_findrule', [])
 
 " Windows only!
 if has('win32') || has('win64')
@@ -20,13 +22,11 @@ if has('win32') || has('win64')
   command! -nargs=0 QuickiTunesInfo
         \ echo quickitunes#request('trackInfo ' . g:quickitunes_quickinfo)
   command! -bar -bang -nargs=* QuickiTunesLyrics
-        \ try |
-        \   if ! isdirectory(g:quickitunes_lyrics_rootdir) | throw 'Directory does not exist.' | endif |
-        \   execute (<bang>1 ? 'split ' : 'edit ') . g:quickitunes_lyrics_rootdir . '/'
-        \         . '*' . (<q-args> ==# '' ? g:quickitunes#request('trackInfo name') : <q-args>) . '*' |
-        \ catch |
-        \   echohl ErrorMsg | echo 'Lyrics not found. (or too many lyrics found.)' | echohl None |
-        \ endtry
+        \ let s:lyricspath = quickitunes#getlyricspath(<q-args>) |
+        \ if filereadable(s:lyricspath) |
+        \   execute (<bang>1 ? 'split ' : 'edit ') . s:lyricspath |
+        \ endif |
+        \ unlet s:lyricspath
 endif
 
 let &cpoptions = s:save_cpo
