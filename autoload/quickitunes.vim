@@ -132,7 +132,7 @@ function! quickitunes#getlyricspath(...)
   return ''
 endfunction
 
-function! quickitunes#complete(arglead, cmdline, cursorpos) "{{{
+function! quickitunes#complete_QuickiTunes(arglead, cmdline, cursorpos) "{{{
   let cmd = split(a:cmdline, ' ') " ['QuickiTunes', {command}, {argument}, ...]
   if len(cmd) < 2 || len(cmd) == 2 && strlen(a:arglead) > 0
     return filter(copy(s:script.commands), 'v:val =~ a:arglead')
@@ -143,6 +143,19 @@ function! quickitunes#complete(arglead, cmdline, cursorpos) "{{{
           \   '^' . substitute(a:arglead, '*', '.*', 'g')
           \ ))
   endif
+endfunction "}}}
+
+function! quickitunes#complete_QuickiTunesLyrics(arglead, cmdline, cursorpos) "{{{
+  if ! isdirectory(g:quickitunes_lyrics_rootdir) | return [] | endif
+  let cmdline = a:cmdline[: a:cursorpos - 1]
+  let [cmdname; cmdargs] = split(cmdline, '\m^\s*\S\+\zs\s\+')
+  return len(cmdargs) > 0
+        \ ? map(globpath(
+        \     g:quickitunes_lyrics_rootdir,
+        \     '*' . substitute(cmdargs[0], '\m^\*\|\*$', '', 'g') . '*',
+        \     0, 1
+        \   ), {i, path -> substitute(path, glob2regpat(g:quickitunes_lyrics_rootdir)[: -2], '', '')})
+        \ : []
 endfunction "}}}
 
 let &cpoptions = s:save_cpo
