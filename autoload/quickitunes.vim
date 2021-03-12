@@ -31,7 +31,7 @@ function! quickitunes#getlyricspath(...)
         \  filter(copy(g:quickitunes_lyrics_skippairs), {k, v -> strchars(v) == 2}),
         \  {k, v -> substitute(v, '\m^\(.\)\(.\)$', {m -> m[1] . '\[^' . m[2] . ']\*' . m[2]}, '')}
         \), '\|') . '\)\s\*'
-  function! trackinfo._get(key) " {{{
+  function! trackinfo._get(key) "{{{
     if ! has_key(self, a:key)
       if match(a:key, '^fuzzy_') > -1
         let self[a:key] = self._get(matchstr(a:key, '\m^fuzzy_\zs.*'))
@@ -42,7 +42,7 @@ function! quickitunes#getlyricspath(...)
       endif
     endif
     return self[a:key]
-  endfunction " }}}
+  endfunction "}}}
   let rules = get(a:, 1, '') !=# ''
         \ ? ['*' . substitute(a:1, '\m^\*\|\*$', '', 'g') . '*']
         \ : g:quickitunes_lyrics_findrule
@@ -92,8 +92,8 @@ let s:completes.commands = filter([
 \))
 let s:completes.trackinfo = filereadable(s:files.trackinfo_completes)
       \ ? readfile(s:files.trackinfo_completes) : []
-" }}}
-function! quickitunes#complete(arglead, cmdline, cursorpos) " {{{
+"}}}
+function! quickitunes#complete(arglead, cmdline, cursorpos) "{{{
   let cmd = split(a:cmdline, ' ') " ['QuickiTunes', {command}, {argument}, ...]
   if len(cmd) < 2 || len(cmd) == 2 && strlen(a:arglead) > 0
     return filter(copy(s:completes.commands), 'v:val =~ a:arglead')
@@ -104,7 +104,7 @@ function! quickitunes#complete(arglead, cmdline, cursorpos) " {{{
           \   '^' . substitute(a:arglead, '*', '.*', 'g')
           \ ))
   endif
-endfunction " }}}
+endfunction "}}}
 
 let &cpoptions = s:save_cpo
 unlet s:save_cpo
