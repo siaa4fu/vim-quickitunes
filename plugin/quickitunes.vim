@@ -25,11 +25,11 @@ let g:quickitunes_lyrics_skippairs =
 
 " Windows only!
 if has('win32') || has('win64')
-  command! -nargs=+ -complete=customlist,quickitunes#complete QuickiTunes
+  command! -nargs=1 -complete=customlist,quickitunes#complete QuickiTunes
         \ echohl WarningMsg | echo quickitunes#request(<q-args>) | echohl None
   command! -nargs=0 QuickiTunesInfo
         \ echo quickitunes#request('trackInfo ' . g:quickitunes_quickinfo)
-  command! -bar -bang -nargs=* QuickiTunesLyrics
+  command! -bar -bang -nargs=? QuickiTunesLyrics
         \ let s:lyricspath = quickitunes#getlyricspath(<q-args>) |
         \ if filereadable(s:lyricspath) |
         \   execute (<bang>1 ? 'split ' : 'edit ') . s:lyricspath |
