@@ -11,7 +11,7 @@ let g:quickitunes_hide_completes =
 let g:quickitunes_quickinfo =
       \ get(g:, 'quickitunes_quickinfo', 'name artist album year rating')
 let g:quickitunes_lyrics_rootdir =
-      \ substitute(get(g:, 'quickitunes_lyrics_rootdir', ''), '\m[\\/]$', '', '')
+      \ substitute(get(g:, 'quickitunes_lyrics_rootdir', ''), '\m[\\/]$', '', '') . '/'
 let g:quickitunes_lyrics_findrule =
       \ get(g:, 'quickitunes_lyrics_findrule', [
       \   '<artist> - <name>.txt',

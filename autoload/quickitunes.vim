@@ -47,7 +47,7 @@ function! quickitunes#getlyricspath(...)
         \ ? ['*' . substitute(a:1, '\m^\*\|\*$', '', 'g') . '*']
         \ : g:quickitunes_lyrics_findrule
   for rule in rules
-    let files = globpath(g:quickitunes_lyrics_rootdir . '/',
+    let files = globpath(g:quickitunes_lyrics_rootdir,
           \ substitute(rule, '\m<\([^> ]*\)>', {m -> trackinfo._get(m[1])}, 'g'),
           \ 0, 1)
     if len(files) == 1
