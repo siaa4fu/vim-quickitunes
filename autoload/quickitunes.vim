@@ -36,7 +36,7 @@ let s:script.commands = filter([
       \ 'ratingUp',
       \ 'ratingDown',
       \ 'trackInfo',
-      \], {i, cmd -> cmd !~ '\m^\%(' . join(g:quickitunes_hide_completes, '\|') . '\)$'})
+      \], {i, cmd -> cmd !~# '\V\^\%(' . join(g:quickitunes_hide_completes, '\|') . '\)\$'})
 let s:script.trackinfo = [
       \ 'album',
       \ 'albumartist',
