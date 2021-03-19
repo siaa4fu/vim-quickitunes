@@ -133,16 +133,20 @@ function! quickitunes#getlyricspath(...)
 endfunction
 
 function! quickitunes#complete_QuickiTunes(arglead, cmdline, cursorpos) "{{{
-  let cmd = split(a:cmdline, ' ') " ['QuickiTunes', {command}, {argument}, ...]
-  if len(cmd) < 2 || len(cmd) == 2 && strlen(a:arglead) > 0
-    return filter(copy(s:script.commands), 'v:val =~ a:arglead')
-  elseif cmd[1] ==# 'trackInfo'
-    return filter(copy(s:script.trackinfo), printf(
-          \ 'v:val !~ ''%s'' && v:val =~ ''%s''',
-          \   '^\%(' . join(cmd, '\|') . '\)$',
-          \   '^' . substitute(a:arglead, '*', '.*', 'g')
-          \ ))
+  let cmdline = a:cmdline[: a:cursorpos - 1]
+  let [cmdname; cmdargs] = split(cmdline, '\m\s\+')
+        \ + (strlen(a:arglead) == 0 && cmdline =~# '\m\s$' ? [''] : [])
+  if len(cmdargs) == 1
+    return filter(copy(s:script.commands),
+          \ {i, cmd -> cmd =~ '\V' . escape(a:arglead, '\')})
+  elseif len(cmdargs) > 1 && cmdargs[0] ==# 'trackInfo'
+    return filter(copy(s:script.trackinfo),
+          \ {i, info -> info !~ '\V\^\%('
+          \                     . join(map(cmdargs[: -2], {i, v -> escape(v, '\')}), '\|')
+          \                     . '\)\$'
+          \             && info =~ '\V' . escape(a:arglead, '\')})
   endif
+  return []
 endfunction "}}}
 
 function! quickitunes#complete_QuickiTunesLyrics(arglead, cmdline, cursorpos) "{{{
