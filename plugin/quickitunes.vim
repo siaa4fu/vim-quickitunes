@@ -32,7 +32,9 @@ if has('win32') || has('win64')
   command! -bar -bang -nargs=? -complete=customlist,quickitunes#complete_QuickiTunesLyrics QuickiTunesLyrics
         \ let s:lyricspath = quickitunes#getlyricspath(<q-args>) |
         \ if filereadable(s:lyricspath) |
-        \   execute (<bang>1 ? 'split ' : 'edit ') . s:lyricspath |
+        \   execute (<bang>1 ? 'split' : 'edit')
+        \           '+setlocal\ nomodifiable\ noswapfile\ nobuflisted\ bufhidden=delete'
+        \           s:lyricspath |
         \ endif |
         \ unlet s:lyricspath
 endif
