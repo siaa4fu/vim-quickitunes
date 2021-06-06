@@ -154,7 +154,7 @@ function! quickitunes#complete_QuickiTunesLyrics(arglead, cmdline, cursorpos) "{
   let cmdline = a:cmdline[: a:cursorpos - 1]
   let [cmdname; cmdargs] = split(cmdline, '\%([^\\]\@<=\s\)\+')
         \ + (strlen(a:arglead) == 0 && cmdline =~# '\m[^\\]\s$' ? [''] : [])
-  return len(cmdargs) > 0
+  return len(cmdargs) == 1
         \ ? map(globpath(
         \     g:quickitunes_lyrics_rootdir,
         \     '*' . substitute(cmdargs[0], '\m^\*\|\*$', '', 'g') . '*',
