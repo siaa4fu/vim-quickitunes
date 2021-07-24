@@ -1,8 +1,4 @@
-" File: autoload/quickitunes.vim
-
 scriptencoding utf-8
-let s:save_cpo = &cpoptions
-set cpoptions&vim
 
 let s:has_vimproc = 0
 silent! let s:has_vimproc = vimproc#version()
@@ -162,6 +158,3 @@ function! quickitunes#complete_QuickiTunesLyrics(arglead, cmdline, cursorpos) "{
         \   ), {i, path -> fnameescape(substitute(path, glob2regpat(g:quickitunes_lyrics_rootdir)[: -2], '', ''))})
         \ : []
 endfunction "}}}
-
-let &cpoptions = s:save_cpo
-unlet s:save_cpo

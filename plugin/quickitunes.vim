@@ -1,10 +1,6 @@
-" File: plugin/quickitunes.vim
-
 scriptencoding utf-8
 if exists('g:loaded_quickitunes') | finish | endif
 let g:loaded_quickitunes = 1
-let s:save_cpo = &cpoptions
-set cpoptions&vim
 
 let g:quickitunes_hide_completes =
       \ get(g:, 'quickitunes_hide_completes', [])
@@ -38,6 +34,3 @@ if has('win32') || has('win64')
         \ endif |
         \ unlet s:lyricspath
 endif
-
-let &cpoptions = s:save_cpo
-unlet s:save_cpo
