@@ -29,7 +29,7 @@ if has('win32') || has('win64')
         \ let s:lyricspath = quickitunes#getlyricspath(<q-args>) |
         \ if filereadable(s:lyricspath) |
         \   execute (<bang>1 ? <q-mods> . ' split' : 'edit')
-        \           '+setlocal\ nomodifiable\ noswapfile\ nobuflisted\ bufhidden=delete'
+        \           '+setlocal\ nomodifiable\ noswapfile\ nobuflisted\ bufhidden=wipe'
         \           s:lyricspath |
         \ endif |
         \ unlet s:lyricspath
