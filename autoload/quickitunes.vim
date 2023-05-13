@@ -122,10 +122,11 @@ function! quickitunes#getlyricspath(...)
           \ 0, 1)
     if len(files) == 1
       return files[0]
+    else
+      echohl ErrorMsg | echo (len(files) == 0 ? 'No' : 'Too many') 'lyrics found.' | echohl None
+      return ''
     endif
   endfor
-  echohl ErrorMsg | echo 'Lyrics not found, or too many lyrics found.' | echohl None
-  return ''
 endfunction
 
 function! quickitunes#complete_QuickiTunes(arglead, cmdline, cursorpos) "{{{
