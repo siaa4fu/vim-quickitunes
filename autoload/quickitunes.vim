@@ -129,6 +129,30 @@ function! quickitunes#getlyricspath(...)
   endfor
 endfunction
 
+let s:lyric_bufnr = -1
+function! quickitunes#openlyric(lyricfilename, ...)
+  " a:1 - open command (string)
+  let lyricpath = quickitunes#getlyricspath(a:lyricfilename)
+  if ! filereadable(lyricpath) | return | endif
+  let opencmd = a:0 > 0 ? a:1 : 'split'
+  if ! bufexists(s:lyric_bufnr)
+    " open new buffer
+    execute opencmd
+  else
+    " reuse the buffer
+    let winnr = bufwinnr(s:lyric_bufnr)
+    if winnr > -1
+      execute winnr 'wincmd w'
+    else
+      execute opencmd
+      execute s:lyric_bufnr 'buffer!'
+    endif
+  endif
+  execute 'edit' lyricpath
+  setlocal nomodifiable noswapfile nobuflisted bufhidden=wipe
+  let s:lyric_bufnr = bufnr('%')
+endfunction
+
 function! quickitunes#complete_QuickiTunes(arglead, cmdline, cursorpos) "{{{
   let cmdline = a:cmdline[: a:cursorpos - 1]
   let [cmdname; cmdargs] = split(cmdline, '\m\s\+')

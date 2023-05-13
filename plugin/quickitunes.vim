@@ -26,11 +26,5 @@ if has('win32') || has('win64')
   command! -nargs=0 QuickiTunesInfo
         \ echo quickitunes#request('trackInfo ' . g:quickitunes_quickinfo)
   command! -bar -bang -nargs=? -complete=customlist,quickitunes#complete_QuickiTunesLyrics QuickiTunesLyrics
-        \ let s:lyricspath = quickitunes#getlyricspath(<q-args>) |
-        \ if filereadable(s:lyricspath) |
-        \   execute (<bang>1 ? <q-mods> . ' split' : 'edit')
-        \           '+setlocal\ nomodifiable\ noswapfile\ nobuflisted\ bufhidden=wipe'
-        \           s:lyricspath |
-        \ endif |
-        \ unlet s:lyricspath
+        \ call quickitunes#openlyric(<q-args>, <bang>1 ? <q-mods> . ' split' : 'enew')
 endif
