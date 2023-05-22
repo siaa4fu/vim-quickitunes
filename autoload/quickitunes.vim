@@ -116,15 +116,18 @@ function! quickitunes#getlyricspath(...)
   let rules = get(a:, 1, '') !=# ''
         \ ? ['*' . substitute(a:1, '\m^\*\|\*$', '', 'g') . '*']
         \ : g:quickitunes_lyrics_findrule
+  let multipleLyricsFound = v:false
   for rule in rules
     let files = globpath(g:quickitunes_lyrics_rootdir,
           \ substitute(rule, '\m<\([^> ]*\)>', {m -> trackinfo._get(m[1])}, 'g'),
           \ 0, 1)
     if len(files) == 1
       return files[0]
+    elseif len(files) > 1
+      let multipleLyricsFound = v:true
     endif
   endfor
-  echohl ErrorMsg | echo 'Lyrics not found, or too many lyrics found.' | echohl None
+  echohl ErrorMsg | echo (multipleLyricsFound ? 'Multiple' : 'No') 'lyrics found.' | echohl None
   return ''
 endfunction
 
