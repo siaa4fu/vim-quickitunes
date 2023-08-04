@@ -90,10 +90,10 @@ function! quickitunes#request(command)
         \), 'sjis', &encoding), '\m^\n\+\|\n\+$', '', 'g')
 endfunction
 
-function! quickitunes#getlyricspath(...)
+function! quickitunes#getlyricspath(echoerror, ...)
   " a:1 - fuzzy filename (string)
   if ! isdirectory(g:quickitunes_lyrics_rootdir)
-    echohl ErrorMsg | echo 'Lyrics directory does not exist.' | echohl None
+    echoerr 'Lyrics directory does not exist.'
     return ''
   endif
   let trackinfo = {}
@@ -127,15 +127,29 @@ function! quickitunes#getlyricspath(...)
       let multipleLyricsFound = v:true
     endif
   endfor
-  echohl ErrorMsg | echo (multipleLyricsFound ? 'Multiple' : 'No') 'lyrics found.' | echohl None
+  if a:echoerror
+    echohl ErrorMsg | echo (multipleLyricsFound ? 'Multiple' : 'No') 'lyrics found.' | echohl None
+  endif
   return ''
 endfunction
 
 let s:lyric_bufnr = -1
-function! quickitunes#openlyric(lyricfilename, ...)
+function! quickitunes#openlyric(openmode, lyricfilename, ...)
   " a:1 - open command (string)
-  let lyricpath = quickitunes#getlyricspath(a:lyricfilename)
-  if ! filereadable(lyricpath) | return | endif
+  if a:openmode ==# 'view'
+    let lyricpath = quickitunes#getlyricspath(v:true, a:lyricfilename)
+    if ! filereadable(lyricpath) | return | endif
+  elseif a:openmode ==# 'edit'
+    let lyricpath = quickitunes#getlyricspath(v:false, a:lyricfilename)
+    if ! filereadable(lyricpath)
+      let lyricpath = empty(a:lyricfilename) ? input('Lyrics filename: ') : a:lyricfilename
+      if empty(lyricpath) | return | endif
+      let lyricpath = g:quickitunes_lyrics_rootdir . '/' . lyricpath
+    endif
+  else
+    echoerr 'Invalid mode.' a:openmode
+    return
+  endif
   let opencmd = a:0 > 0 ? a:1 : 'split'
   if ! bufexists(s:lyric_bufnr)
     " open new buffer
@@ -151,7 +165,9 @@ function! quickitunes#openlyric(lyricfilename, ...)
     endif
   endif
   execute 'edit' lyricpath
-  setlocal nomodifiable noswapfile nobuflisted bufhidden=wipe
+  if a:openmode ==# 'view'
+    setlocal nomodifiable noswapfile nobuflisted bufhidden=wipe
+  endif
   let s:lyric_bufnr = bufnr('%')
 endfunction
 

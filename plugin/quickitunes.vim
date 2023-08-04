@@ -26,5 +26,7 @@ if has('win32') || has('win64')
   command! -nargs=0 QuickiTunesInfo
         \ echo quickitunes#request('trackInfo ' . g:quickitunes_quickinfo)
   command! -bar -bang -nargs=? -complete=customlist,quickitunes#complete_QuickiTunesLyrics QuickiTunesLyrics
-        \ call quickitunes#openlyric(<q-args>, <bang>1 ? <q-mods> . ' split' : 'enew')
+        \ call quickitunes#openlyric('view', <q-args>, <bang>1 ? <q-mods> . ' split' : 'enew')
+  command! -bar -bang -nargs=? -complete=customlist,quickitunes#complete_QuickiTunesLyrics QuickiTunesEditLyrics
+        \ call quickitunes#openlyric('edit', <q-args>, <bang>1 ? <q-mods> . ' split' : 'enew')
 endif
